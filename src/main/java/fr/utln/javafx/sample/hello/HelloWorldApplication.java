@@ -39,6 +39,8 @@ public class HelloWorldApplication extends Application {
    TextField tailleGrille = new TextField();//la grille de taille n*n
    final ColorPicker selectionneurCouleur1 = new ColorPicker();
    final ColorPicker selectionneurCouleur2 = new ColorPicker();
+   final Button btnAcceuil = new Button("Acceuil");
+   final Button btnActualiser = new Button("Nouvelle partie ");
    @Override
    public void start(Stage stagePrincipale) {
 
@@ -81,6 +83,24 @@ public class HelloWorldApplication extends Application {
       tailleGrille.setFont(Font.font( 20));//pour la taille des caracteres
 
       btnDebut.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+      btnActualiser.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+      btnAcceuil.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+
+      btnActualiser.setOnAction(new EventHandler<ActionEvent>(){
+         @Override
+         public void handle(ActionEvent actionEvent) {
+            nouvellePartie(stagePrincipale);
+
+         }
+      });
+
+      btnAcceuil.setOnAction(new EventHandler<ActionEvent>(){
+         @Override
+         public void handle(ActionEvent actionEvent) {
+            nouvellePartie(stagePrincipale);
+
+         }
+      });
       btnDebut.setOnAction(new EventHandler<ActionEvent>() {
          @Override
          public void handle(ActionEvent e) {
@@ -91,33 +111,9 @@ public class HelloWorldApplication extends Application {
                         bienvenue.setText("veuillez saisir deux noms differents !");
 
                      } else {
-                        bienvenue.setText("vous pouvez commencer la partie !");
+                        nouvellePartie(stagePrincipale);
 
-                        selectionneurCouleur1.getValue();
-                        Color couleurJoueur2 = selectionneurCouleur2.getValue();
-                        Color couleurJoueur1 = selectionneurCouleur1.getValue();
 
-                        GridPane grilleJeu = new GridPane();
-                        BorderPane borderPane = new BorderPane();
-                        borderPane.setCenter(grilleJeu);
-
-                        Label statutJeu = new Label("Debut partie");
-                        //borderPane.setBottom(statutJeu);
-                        Scene scene2 = new Scene(borderPane, 1200, 1200);
-                        int n = Integer.parseInt(tailleGrille.getText());
-                        Cell[][] grille = new Cell[n][n];
-                        for(int i = 0; i < n;i++){
-                           for(int j = 0 ; j < n ;j ++)
-                           {
-                              grille[i][j] = new Cell(couleurJoueur1);
-                              Circle clip = new Circle(100, 100, 50);
-                              clip.setFill(couleurJoueur1);
-                              //clip.setOnMouseClicked(mouseEvent-> System.out.printf("Bouton %s cliqué sur le nœud, %d click(s) %f x %f.",mouseEvent.getButton(), mouseEvent.getClickCount(), mouseEvent.getX(), mouseEvent.getY()).println());
-                              //grilleJeu.add(clip, j, i);
-                              grilleJeu.add(grille[i][j], j, i);
-                           }
-                        }
-                        stagePrincipale.setScene(scene2);
                      }
                   } else {
                      bienvenue.setText("veuillez saisir la taille de la grille! ");
@@ -151,6 +147,41 @@ public class HelloWorldApplication extends Application {
       stage.show();
       */
    }
+   public void nouvellePartie(Stage stagePrincipale){
+
+      selectionneurCouleur1.getValue();
+      Color couleurJoueur2 = selectionneurCouleur2.getValue();
+      Color couleurJoueur1 = selectionneurCouleur1.getValue();
+
+      GridPane grilleJeu = new GridPane();
+      BorderPane borderPane = new BorderPane();
+      Label statutJeu = new Label("Debut partie");
+      statutJeu.setStyle("-fx-background-color: #9E9E9E");
+      statutJeu.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+      borderPane.setBottom(btnActualiser);
+      borderPane.setCenter(grilleJeu);
+      borderPane.setLeft(statutJeu);
+      //borderPane.setRight(statutJeu);
+      Scene scene2 = new Scene(borderPane, 1200, 1200);
+      int n = Integer.parseInt(tailleGrille.getText());
+      Cell[][] grille = new Cell[n][n];
+      for(int i = 0; i < n;i++){
+         for(int j = 0 ; j < n ;j ++)
+         {
+            grille[i][j] = new Cell(couleurJoueur1);
+            Circle clip = new Circle(100, 100, 50);
+            clip.setFill(couleurJoueur1);
+            //clip.setOnMouseClicked(mouseEvent-> System.out.printf("Bouton %s cliqué sur le nœud, %d click(s) %f x %f.",mouseEvent.getButton(), mouseEvent.getClickCount(), mouseEvent.getX(), mouseEvent.getY()).println());
+            //grilleJeu.add(clip, j, i);
+            grilleJeu.add(grille[i][j], j, i);
+         }
+      }
+
+      stagePrincipale.setScene(scene2);
+   }
+   public void Acceuil(){
+
+   }
    public boolean is(int n, Cell[][] grille){
       for(int i = 0 ; i < n ; i++){
          for (int j = 0 ; j < n ; j++){
@@ -162,15 +193,7 @@ public class HelloWorldApplication extends Application {
       }
       return false ;
    }
-   public boolean gagnant(char joueur, int n, Cell[][] grille ){
-      //si tour gagné sur la premiere diagonale
-      for (int i = 0 ; i  < n ; i++){
-            if(grille[i][i].getJoueur() != joueur ){
-               return false;
-         }
-      }
-      return true ;
-   }
+
 
 
 

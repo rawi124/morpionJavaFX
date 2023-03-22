@@ -25,4 +25,13 @@ public class Cell extends Pane {
         clip.setFill(couleur);
         getChildren().addAll(clip);
     }
+    public boolean gagnant(char joueur, int n, Cell[][] grille ){
+        //si tour gagné sur la premiere diagonale
+        for (int i = 0 ; i  < n ; i++){
+            if(grille[i][i].getJoueur() != joueur ){
+                return false;
+            }
+        }
+        return true ;
+    }
 }
