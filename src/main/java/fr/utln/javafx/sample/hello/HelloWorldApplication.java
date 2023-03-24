@@ -153,6 +153,9 @@ public class HelloWorldApplication extends Application {
       Color couleurJoueur2 = selectionneurCouleur2.getValue();
       Color couleurJoueur1 = selectionneurCouleur1.getValue();
 
+      Joueur joueuer1 = new Joueur('X',couleurJoueur1);
+      Joueur joueur2 = new Joueur('O', couleurJoueur2);
+
       GridPane grilleJeu = new GridPane();
       BorderPane borderPane = new BorderPane();
       Label statutJeu = new Label("Debut partie");
@@ -168,7 +171,7 @@ public class HelloWorldApplication extends Application {
       for(int i = 0; i < n;i++){
          for(int j = 0 ; j < n ;j ++)
          {
-            grille[i][j] = new Cell(couleurJoueur1);
+            grille[i][j] = new Cell();
             Circle clip = new Circle(100, 100, 50);
             clip.setFill(couleurJoueur1);
             //clip.setOnMouseClicked(mouseEvent-> System.out.printf("Bouton %s cliqué sur le nœud, %d click(s) %f x %f.",mouseEvent.getButton(), mouseEvent.getClickCount(), mouseEvent.getX(), mouseEvent.getY()).println());
@@ -185,7 +188,7 @@ public class HelloWorldApplication extends Application {
    public boolean is(int n, Cell[][] grille){
       for(int i = 0 ; i < n ; i++){
          for (int j = 0 ; j < n ; j++){
-            if (grille[i][j].getJoueur() == ' ' ){
+            if (grille[i][j].getJoueur().getSymbole() == ' ' ){
                return false;
             }
          }

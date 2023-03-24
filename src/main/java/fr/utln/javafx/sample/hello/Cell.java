@@ -6,32 +6,42 @@ import javafx.scene.shape.Circle;
 
 
 public class Cell extends Pane {
-    private char joueur = ' ';
+    private Joueur joueur ;
     private Color couleur ;
-    public Cell(Color couleur){
+    public Cell(){
         setStyle("-fx-border-color: black");
         this.setPrefSize(300, 300);
-        this.setOnMouseClicked(e ->click(couleur));
+        this.setOnMouseClicked(e ->click(this.getJoueur()));
     }
-    public char getJoueur() {
+    public Joueur getJoueur() {
         return joueur;
     }
-    public void setJoueur(Color couleur){
-        this.couleur = couleur ;
-
+    public void click(Joueur joueuer){
+        setJoueur(joueuer);
     }
-    public void click(Color couleur){
-        Circle clip = new Circle(100, 100, 50);
-        clip.setFill(couleur);
-        getChildren().addAll(clip);
-    }
-    public boolean gagnant(char joueur, int n, Cell[][] grille ){
+    public boolean gagnant(Joueur joueur, int n, Cell[][] grille ){
         //si tour gagné sur la premiere diagonale
         for (int i = 0 ; i  < n ; i++){
-            if(grille[i][i].getJoueur() != joueur ){
+            if(grille[i][i].getJoueur().getSymbole() != joueur.getSymbole() ){
                 return false;
             }
         }
         return true ;
+    }
+
+    public Color getCouleur() {
+        return couleur;
+    }
+
+    public void setJoueur(Joueur joueur) {
+        this.joueur = joueur;
+        Circle clip = new Circle(this.getHeight()-100, this.getWidth()-100, 30);
+        if(joueur.getSymbole() == 'X'){
+            clip.setFill(joueur.getCouleur());
+        }
+        else{//pour apres traiter cas des X et O
+            clip.setFill(joueur.getCouleur());
+        }
+        getChildren().addAll(clip);
     }
 }

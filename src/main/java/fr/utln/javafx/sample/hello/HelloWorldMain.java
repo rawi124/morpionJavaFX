@@ -3,7 +3,7 @@ package fr.utln.javafx.sample.hello;
 import javafx.application.Application;
 
 /**
- * The Hello world main class. This class enables to launch the Hello World JavaFX application.
+ * The Hello world main class. This class enables to launch t.he Hello World JavaFX application.
  * @author Julien SEINTURIER
  *
  */
