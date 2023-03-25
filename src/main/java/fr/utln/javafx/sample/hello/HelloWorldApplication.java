@@ -1,8 +1,4 @@
 package fr.utln.javafx.sample.hello;
-
-import fr.utln.javafx.sample.hello.Cell;
-
-
 import javafx.application.Application;
 
 //import javafx.event.EventHandler;
@@ -14,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
@@ -22,16 +20,17 @@ import java.util.Random;
 
 /**
  * The JavaFX Hello World application.
- * @author Julien SEINTURIER
+ * @author Ben Amira Rawia
  */
 @SuppressWarnings("Convert2Lambda")
 public class HelloWorldApplication extends Application {
-   private String joueurs ="XO";
+   private static String joueurs ="XO";
    Random random = new Random();
-   int nb = random.nextInt(1);
-   private char joueurActuel = joueurs.charAt(nb);
+   int nb = random.nextInt(2);//generer un entier aleatoire 0 ou 1 0 donnera X et 1 donnera 0
+   public char joueurActuel = joueurs.charAt(nb);//le joueurActuel sera au debut soit X soit 0
    private Button btnDebut = new Button("Commencer partie");
    private Label  bienvenue = new Label("");
+   private Label statutJeu = new Label("Debut partie");
    private GridPane disposition = new GridPane();
    private Scene scene = new Scene(disposition, 750, 550);
    TextField nom1 = new TextField();//le nom du premier utilisateur
@@ -43,6 +42,9 @@ public class HelloWorldApplication extends Application {
    final Button btnActualiser = new Button("Nouvelle partie ");
    @Override
    public void start(Stage stagePrincipale) {
+      selectionneurCouleur1.getValue();
+      Color couleurJoueur2 = selectionneurCouleur2.getValue();
+      Color couleurJoueur1 = selectionneurCouleur1.getValue();
 
       //ajoute les composantes graphiques a la borderPane
       disposition.setPadding(new Insets(100, 100, 100, 100));
@@ -109,11 +111,8 @@ public class HelloWorldApplication extends Application {
                   if (!tailleGrille.getText().equals("")) {
                      if (nom2.getText().equals(nom1.getText())) {
                         bienvenue.setText("veuillez saisir deux noms differents !");
-
                      } else {
                         nouvellePartie(stagePrincipale);
-
-
                      }
                   } else {
                      bienvenue.setText("veuillez saisir la taille de la grille! ");
@@ -132,63 +131,82 @@ public class HelloWorldApplication extends Application {
       stagePrincipale.setTitle("MORPION");
       stagePrincipale.setScene(scene);
       stagePrincipale.show();
-      /*
-      bienvenue.setFont(Font.font( 25));//pour la taille des caracteres
-      bienvenue.setTextFill(Color.WHITESMOKE);//la couleur du texte
-      btnBonjour.setOnAction(evt -> { bienvenue.setText("Bonjour à tous !"); });//Bouton 1
-      btnBienvenue.setOnAction(evt -> { bienvenue.setText("Bienvenue à tout le monde !"); });//bouton 2
-      boutons.setAlignment(Pos.CENTER);
-      boutons.setPadding(new Insets(100, 0, 10, 0));//pour espacer les composantes
-      boutons.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-      disposition.setTop(boutons);
-      disposition.setStyle("-fx-background-color: #FAEBD7");
-      stage.setTitle("MORPION");
-      stage.setScene(scene);
-      stage.show();
-      */
+
    }
    public void nouvellePartie(Stage stagePrincipale){
-
-      selectionneurCouleur1.getValue();
-      Color couleurJoueur2 = selectionneurCouleur2.getValue();
-      Color couleurJoueur1 = selectionneurCouleur1.getValue();
-
-      Joueur joueuer1 = new Joueur('X',couleurJoueur1);
-      Joueur joueur2 = new Joueur('O', couleurJoueur2);
+      char joueuer1 = 'X';
+      char  joueur2 = 'O';
 
       GridPane grilleJeu = new GridPane();
       BorderPane borderPane = new BorderPane();
-      Label statutJeu = new Label("Debut partie");
+
       statutJeu.setStyle("-fx-background-color: #9E9E9E");
       statutJeu.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
       borderPane.setBottom(btnActualiser);
       borderPane.setCenter(grilleJeu);
       borderPane.setLeft(statutJeu);
-      //borderPane.setRight(statutJeu);
+
       Scene scene2 = new Scene(borderPane, 1200, 1200);
       int n = Integer.parseInt(tailleGrille.getText());
       Cell[][] grille = new Cell[n][n];
       for(int i = 0; i < n;i++){
          for(int j = 0 ; j < n ;j ++)
          {
-            grille[i][j] = new Cell();
+            grille[i][j] = new Cell(n, grille);
             Circle clip = new Circle(100, 100, 50);
-            clip.setFill(couleurJoueur1);
-            //clip.setOnMouseClicked(mouseEvent-> System.out.printf("Bouton %s cliqué sur le nœud, %d click(s) %f x %f.",mouseEvent.getButton(), mouseEvent.getClickCount(), mouseEvent.getX(), mouseEvent.getY()).println());
-            //grilleJeu.add(clip, j, i);
             grilleJeu.add(grille[i][j], j, i);
          }
       }
 
       stagePrincipale.setScene(scene2);
    }
-   public void Acceuil(){
-
+   public static boolean diag1(char joueur, int n, Cell[][] grille){
+      for (int i = 0 ; i  < n ; i++){
+         if(grille[i][i].getSymbole() != joueur ){
+            return false;
+         }
+      }
+      return true ;
    }
-   public boolean is(int n, Cell[][] grille){
+   public static boolean diag2(char joueur, int n, Cell[][] grille){
+      int j = n-1 ;
+      for (int i = 0 ; i  < n ; i++){
+         if(grille[i][j].getSymbole() != joueur ){
+            return false;
+         }
+         j --;
+      }
+      return true ;
+   }
+   public static boolean colonne(char joueur, int n, Cell[][] grille){
+
+      for (int i = 0 ; i  < n ; i++){
+         for(int j = 0; j < n ; j++){
+            if(grille[i][j].getSymbole() != joueur ){
+               return false;}
+         }
+         return true ;
+      }
+      return true ;
+   }
+   public static boolean ligne(char joueur, int n, Cell[][] grille){
+      for (int i = 0 ; i  < n ; i++){
+         for(int j = 0; j < n ; j++){
+            if(grille[j][i].getSymbole() != joueur ){
+               return false;}
+         }
+         return true ;
+      }
+      return true ;
+   }
+   public static boolean gagnant(char joueur, int n, Cell[][] grille){
+      return diag1(joueur,n , grille) || diag2(joueur,n , grille)|| colonne(joueur,n , grille)|| ligne(joueur,n , grille);
+   }
+   public boolean casesPleines(int n, Cell[][] grille){
+      /*verifier si toutes les cellules ont ete jouées */
       for(int i = 0 ; i < n ; i++){
          for (int j = 0 ; j < n ; j++){
-            if (grille[i][j].getJoueur().getSymbole() == ' ' ){
+            if (grille[i][j].getSymbole() == ' ' ){
                return false;
             }
          }
@@ -197,7 +215,52 @@ public class HelloWorldApplication extends Application {
       return false ;
    }
 
+   public class Cell extends Pane {
+      private char symbole = ' ';
 
+      public Cell(int n, Cell[][] grille){
+         setStyle("-fx-border-color: black");
+         this.setPrefSize(300, 300);
+         this.setOnMouseClicked(e ->click(n,grille));
+      }
+      public char getSymbole() {
+         return symbole;
+      }
 
+      public void setSymbole(char symbole) {
+         this.symbole = symbole;
+         //un joueur est defini par son symbole
+
+         if(symbole == 'X'){
+            Line diag1 = new Line(10,10,this.getWidth()-10,  this.getHeight()-10);
+            diag1.endXProperty().bind(this.widthProperty().subtract(10));
+            diag1.endYProperty().bind(this.heightProperty().subtract(10));
+            diag1.setFill(selectionneurCouleur1.getValue());
+            Line diag2 = new Line(10, this.getHeight()-10, this.getWidth()-10, 10);
+            diag2.endXProperty().bind(this.widthProperty().subtract(10));
+            diag2.startYProperty().bind(this.heightProperty().subtract(10));
+            diag2.setFill(selectionneurCouleur1.getValue());
+            getChildren().addAll(diag1, diag2);
+         }
+         else{//pour apres traiter cas des X et O
+            Ellipse clip = new Ellipse(this.getWidth()/2, this.getHeight()/2, this.getWidth()/2 - 10, this.getHeight()/2-10);
+            clip.setFill(selectionneurCouleur2.getValue());
+            getChildren().addAll(clip);
+         }
+
+      }
+      public void click(int n, Cell[][] grille){
+         if(joueurActuel != ' ' && symbole == ' ' ) {
+            setSymbole(joueurActuel);
+            if (gagnant(joueurActuel, n, grille)){
+               statutJeu.setText(joueurActuel + "gagant");
+               joueurActuel= ' ';
+            }
+            else{
+               joueurActuel = (joueurActuel == 'X') ? 'O' : 'X';
+            }
+         }
+      }
+   }
 
 }
