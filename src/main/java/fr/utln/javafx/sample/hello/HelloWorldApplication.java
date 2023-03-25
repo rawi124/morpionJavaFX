@@ -29,8 +29,13 @@ public class HelloWorldApplication extends Application {
    int nb = random.nextInt(2);//generer un entier aleatoire 0 ou 1 0 donnera X et 1 donnera 0
    public char joueurActuel = joueurs.charAt(nb);//le joueurActuel sera au debut soit X soit 0
    private Button btnDebut = new Button("Commencer partie");
+   private Button btnQuitter = new Button("Quitter");
+   private Label  morpion = new Label("MORPION");
    private Label  bienvenue = new Label("");
    private Label statutJeu = new Label("Debut partie");
+
+   private Label scoreJoueur1 = new Label("score joueuer 1 a 0");
+   private Label scoreJoueuer2 = new Label("score joueur 2 a 0");
    private GridPane disposition = new GridPane();
    private Scene scene = new Scene(disposition, 750, 550);
    TextField nom1 = new TextField();//le nom du premier utilisateur
@@ -50,41 +55,49 @@ public class HelloWorldApplication extends Application {
       disposition.setPadding(new Insets(100, 100, 100, 100));
       disposition.setVgap(5);
       disposition.setHgap(5);
-      disposition.getChildren().addAll(nom1, nom2, btnDebut, tailleGrille, selectionneurCouleur1, selectionneurCouleur2);
+      disposition.getChildren().addAll(morpion, nom1, nom2, btnDebut, tailleGrille, selectionneurCouleur1, selectionneurCouleur2);
 
-      GridPane.setConstraints(bienvenue, 0, 6);
-      GridPane.setColumnSpan(bienvenue, 2);
-      disposition.getChildren().add(bienvenue);
+      GridPane.setConstraints(morpion, 0, 0);
+      morpion.setFont(Font.font( 50));//pour la taille des caracteres
+      morpion.setTextFill(Color.web("#6A8A82"));//la couleur du texte
+      GridPane.setHalignment(morpion, javafx.geometry.HPos.CENTER);
+
 
       //espace de declaration du TextField pour le joueur 1
       nom1.setPromptText("Joueur 1");
       nom1.setPrefColumnCount(10);
-      GridPane.setConstraints(nom1, 0, 0);
+      nom1.setStyle("    -fx-min-width: 20; -fx-min-height: 40;");
+      nom1.setFont(Font.font( 20));//pour la taille des caracteres
+      GridPane.setConstraints(nom1, 0, 3);
 
       //espace de declaration du TextField pour le joueur 2
       nom2.setPrefColumnCount(15);
       nom2.setPromptText("Joueue 2");
-      GridPane.setConstraints(nom2, 0, 2);
-      GridPane.setConstraints(btnDebut, 0, 7);
+      GridPane.setConstraints(nom2, 0, 4);
+      nom2.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
+      nom2.setFont(Font.font( 20));//pour la taille des caracteres
 
       //espace de declaration du TextField pour la taille de la grille
       tailleGrille.setPrefColumnCount(20);
       tailleGrille.setPromptText("taille de la grille");
-      GridPane.setConstraints(tailleGrille, 0, 3);
+      GridPane.setConstraints(tailleGrille, 0, 5);
 
-      GridPane.setConstraints(selectionneurCouleur1, 0, 5);
-      GridPane.setConstraints(selectionneurCouleur2, 0, 4);
+      GridPane.setConstraints(selectionneurCouleur1, 0, 6);
+      GridPane.setConstraints(selectionneurCouleur2, 0, 7);
+      GridPane.setHalignment(selectionneurCouleur1, javafx.geometry.HPos.CENTER);
+      GridPane.setHalignment(selectionneurCouleur2, javafx.geometry.HPos.CENTER);
 
-      nom1.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
-      nom1.setFont(Font.font( 20));//pour la taille des caracteres
-
-      nom2.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
-      nom2.setFont(Font.font( 20));//pour la taille des caracteres
+      GridPane.setConstraints(bienvenue, 0, 8);
+      GridPane.setColumnSpan(bienvenue, 2);
+      disposition.getChildren().add(bienvenue);
 
       tailleGrille.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
       tailleGrille.setFont(Font.font( 20));//pour la taille des caracteres
 
-      btnDebut.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+      btnDebut.setStyle("-fx-min-width:200; -fx-max-height: 200;");
+      GridPane.setConstraints(btnDebut, 0, 9);
+      GridPane.setHalignment(btnDebut, javafx.geometry.HPos.CENTER);
+
       btnActualiser.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
       btnAcceuil.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
 
@@ -125,35 +138,39 @@ public class HelloWorldApplication extends Application {
                      bienvenue.setText("veuillez saisir le nom du premier joueur");
                   }
             }});
-      disposition.setStyle("-fx-background-color: #9E9E9E");
+      disposition.setStyle("-fx-background-color: #282726");
       bienvenue.setFont(Font.font( 25));//pour la taille des caracteres
-      bienvenue.setTextFill(Color.WHITESMOKE);//la couleur du texte
+      bienvenue.setTextFill(Color.web("#6A8A82"));//la couleur du texte
       stagePrincipale.setTitle("MORPION");
       stagePrincipale.setScene(scene);
       stagePrincipale.show();
 
    }
    public void nouvellePartie(Stage stagePrincipale){
-      char joueuer1 = 'X';
-      char  joueur2 = 'O';
 
       GridPane grilleJeu = new GridPane();
       BorderPane borderPane = new BorderPane();
+      FlowPane composants = new FlowPane(10, 10 ,statutJeu, scoreJoueuer2, scoreJoueur1, btnActualiser);
 
       statutJeu.setStyle("-fx-background-color: #9E9E9E");
       statutJeu.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
-      borderPane.setBottom(btnActualiser);
-      borderPane.setCenter(grilleJeu);
-      borderPane.setLeft(statutJeu);
 
-      Scene scene2 = new Scene(borderPane, 1200, 1200);
+      scoreJoueuer2.setStyle("-fx-background-color: #9E9E9E");
+      scoreJoueuer2.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+
+      scoreJoueur1.setStyle("-fx-background-color: #9E9E9E");
+      scoreJoueur1.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+
+      borderPane.setCenter(grilleJeu);
+      borderPane.setBottom(composants);
+
+      Scene scene2 = new Scene(borderPane, 1000, 1000);
       int n = Integer.parseInt(tailleGrille.getText());
       Cell[][] grille = new Cell[n][n];
       for(int i = 0; i < n;i++){
          for(int j = 0 ; j < n ;j ++)
          {
             grille[i][j] = new Cell(n, grille);
-            Circle clip = new Circle(100, 100, 50);
             grilleJeu.add(grille[i][j], j, i);
          }
       }
@@ -178,29 +195,34 @@ public class HelloWorldApplication extends Application {
       }
       return true ;
    }
-   public static boolean colonne(char joueur, int n, Cell[][] grille){
+   public static boolean lignes(char joueur, int n, Cell[][] grille){
 
       for (int i = 0 ; i  < n ; i++){
+         int tmp = 0;
          for(int j = 0; j < n ; j++){
-            if(grille[i][j].getSymbole() != joueur ){
-               return false;}
+            if(grille[i][j].getSymbole() == joueur ){
+               tmp ++;}
          }
-         return true ;
+         if(tmp == n){return true;}
       }
-      return true ;
+      return false ;
    }
-   public static boolean ligne(char joueur, int n, Cell[][] grille){
-      for (int i = 0 ; i  < n ; i++){
-         for(int j = 0; j < n ; j++){
-            if(grille[j][i].getSymbole() != joueur ){
-               return false;}
+
+   public static boolean colonnes(char joueur, int n, Cell[][] grille){
+      for(int i = 0; i < n; i++) {
+         int tmp = 0 ;
+         for(int j = 0 ; j < n ; j++){
+            if(grille[j][i].getSymbole() == joueur ) {
+               tmp++;}
          }
-         return true ;
+         if(tmp == n ){
+
+         return  true;}
       }
-      return true ;
+      return false ;
    }
    public static boolean gagnant(char joueur, int n, Cell[][] grille){
-      return diag1(joueur,n , grille) || diag2(joueur,n , grille)|| colonne(joueur,n , grille)|| ligne(joueur,n , grille);
+      return diag1(joueur,n , grille) || diag2(joueur,n , grille)|| colonnes(joueur,n , grille)|| lignes(joueur,n , grille);
    }
    public boolean casesPleines(int n, Cell[][] grille){
       /*verifier si toutes les cellules ont ete jouées */
@@ -253,7 +275,10 @@ public class HelloWorldApplication extends Application {
          if(joueurActuel != ' ' && symbole == ' ' ) {
             setSymbole(joueurActuel);
             if (gagnant(joueurActuel, n, grille)){
-               statutJeu.setText(joueurActuel + "gagant");
+               statutJeu.setText(joueurActuel + " vient de gagner le tour ! BRAVO");
+               scoreJoueur1.setText("score joueur "+joueurActuel +" est a 1");
+               char autreJoueur = (joueurActuel == 'X') ? 'O' : 'X';
+               scoreJoueuer2.setText("score joueur "+autreJoueur+" est  a 0");
                joueurActuel= ' ';
             }
             else{
