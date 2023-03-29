@@ -7,12 +7,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.text.*;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.util.Random;
@@ -34,10 +37,11 @@ public class HelloWorldApplication extends Application {
    private Label  bienvenue = new Label("");
    private Label statutJeu = new Label("Debut partie");
 
-   private Label scoreJoueur1 = new Label("score joueuer 1 a 0");
-   private Label scoreJoueuer2 = new Label("score joueur 2 a 0");
+   private Label scoreJoueur1 = new Label();
+   public Label scoreJoueuer2 = new Label();
+   public Label nbTour = new Label("nombre de parties jouées = 0");
    private GridPane disposition = new GridPane();
-   private Scene scene = new Scene(disposition, 750, 550);
+   private Scene scene = new Scene(disposition, 750, 1000);
    TextField nom1 = new TextField();//le nom du premier utilisateur
    TextField nom2 = new TextField();//le nom du deuxieme utilisateur
    TextField tailleGrille = new TextField();//la grille de taille n*n
@@ -45,9 +49,19 @@ public class HelloWorldApplication extends Application {
    final ColorPicker selectionneurCouleur2 = new ColorPicker();
    final Button btnAcceuil = new Button("Acceuil");
    final Button btnActualiser = new Button("Nouvelle partie ");
+   final Image img = new Image(getClass().getResourceAsStream("/imgs/unnamed.png"));
+   final ImageView imageView = new ImageView(img);
+   final HBox image = new HBox(imageView);
+   int scoreJX = 0 ;
+   int scoreJO = 0 ;
+   int nombreP = 0 ;
+   Popup popup = new Popup();
+
+
    @Override
    public void start(Stage stagePrincipale) {
       selectionneurCouleur1.getValue();
+
       Color couleurJoueur2 = selectionneurCouleur2.getValue();
       Color couleurJoueur1 = selectionneurCouleur1.getValue();
 
@@ -55,39 +69,41 @@ public class HelloWorldApplication extends Application {
       disposition.setPadding(new Insets(100, 100, 100, 100));
       disposition.setVgap(5);
       disposition.setHgap(5);
-      disposition.getChildren().addAll(morpion, nom1, nom2, btnDebut, tailleGrille, selectionneurCouleur1, selectionneurCouleur2);
+      disposition.getChildren().addAll(image, morpion, nom1, nom2, btnDebut, tailleGrille, selectionneurCouleur1, selectionneurCouleur2);
 
-      GridPane.setConstraints(morpion, 0, 0);
+      GridPane.setConstraints(morpion, 0, 1);
+      GridPane.setConstraints(image, 0, 0);
       morpion.setFont(Font.font( 50));//pour la taille des caracteres
       morpion.setTextFill(Color.web("#6A8A82"));//la couleur du texte
       GridPane.setHalignment(morpion, javafx.geometry.HPos.CENTER);
 
 
+
       //espace de declaration du TextField pour le joueur 1
       nom1.setPromptText("Joueur 1");
-      nom1.setPrefColumnCount(10);
+      nom1.setPrefColumnCount(5);
       nom1.setStyle("    -fx-min-width: 20; -fx-min-height: 40;");
       nom1.setFont(Font.font( 20));//pour la taille des caracteres
-      GridPane.setConstraints(nom1, 0, 3);
+      GridPane.setConstraints(nom1, 0, 5);
 
       //espace de declaration du TextField pour le joueur 2
       nom2.setPrefColumnCount(15);
-      nom2.setPromptText("Joueue 2");
-      GridPane.setConstraints(nom2, 0, 4);
+      nom2.setPromptText("Joueuer 2");
+      GridPane.setConstraints(nom2, 0, 6);
       nom2.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
       nom2.setFont(Font.font( 20));//pour la taille des caracteres
 
       //espace de declaration du TextField pour la taille de la grille
       tailleGrille.setPrefColumnCount(20);
       tailleGrille.setPromptText("taille de la grille");
-      GridPane.setConstraints(tailleGrille, 0, 5);
+      GridPane.setConstraints(tailleGrille, 0, 7);
 
-      GridPane.setConstraints(selectionneurCouleur1, 0, 6);
-      GridPane.setConstraints(selectionneurCouleur2, 0, 7);
+      GridPane.setConstraints(selectionneurCouleur1, 0, 8);
+      GridPane.setConstraints(selectionneurCouleur2, 0, 9);
       GridPane.setHalignment(selectionneurCouleur1, javafx.geometry.HPos.CENTER);
       GridPane.setHalignment(selectionneurCouleur2, javafx.geometry.HPos.CENTER);
 
-      GridPane.setConstraints(bienvenue, 0, 8);
+      GridPane.setConstraints(bienvenue, 0, 10);
       GridPane.setColumnSpan(bienvenue, 2);
       disposition.getChildren().add(bienvenue);
 
@@ -95,8 +111,9 @@ public class HelloWorldApplication extends Application {
       tailleGrille.setFont(Font.font( 20));//pour la taille des caracteres
 
       btnDebut.setStyle("-fx-min-width:200; -fx-max-height: 200;");
-      GridPane.setConstraints(btnDebut, 0, 9);
+      GridPane.setConstraints(btnDebut, 0, 11);
       GridPane.setHalignment(btnDebut, javafx.geometry.HPos.CENTER);
+      GridPane.setHalignment(image, javafx.geometry.HPos.CENTER);
 
       btnActualiser.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
       btnAcceuil.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
@@ -104,18 +121,16 @@ public class HelloWorldApplication extends Application {
       btnActualiser.setOnAction(new EventHandler<ActionEvent>(){
          @Override
          public void handle(ActionEvent actionEvent) {
+            Random random = new Random();
+            int nb = random.nextInt(2);//generer un entier aleatoire 0 ou 1 0 donnera X et 1 donnera 0
+            joueurActuel = joueurs.charAt(nb);
             nouvellePartie(stagePrincipale);
 
          }
       });
 
-      btnAcceuil.setOnAction(new EventHandler<ActionEvent>(){
-         @Override
-         public void handle(ActionEvent actionEvent) {
-            nouvellePartie(stagePrincipale);
 
-         }
-      });
+
       btnDebut.setOnAction(new EventHandler<ActionEvent>() {
          @Override
          public void handle(ActionEvent e) {
@@ -138,25 +153,29 @@ public class HelloWorldApplication extends Application {
                      bienvenue.setText("veuillez saisir le nom du premier joueur");
                   }
             }});
+
+
       disposition.setStyle("-fx-background-color: #282726");
       bienvenue.setFont(Font.font( 25));//pour la taille des caracteres
       bienvenue.setTextFill(Color.web("#6A8A82"));//la couleur du texte
       stagePrincipale.setTitle("MORPION");
       stagePrincipale.setScene(scene);
       stagePrincipale.show();
-
    }
+
    public void nouvellePartie(Stage stagePrincipale){
 
       GridPane grilleJeu = new GridPane();
       BorderPane borderPane = new BorderPane();
-      FlowPane composants = new FlowPane(10, 10 ,statutJeu, scoreJoueuer2, scoreJoueur1, btnActualiser);
+      FlowPane composants = new FlowPane(10, 10 ,statutJeu, scoreJoueuer2, scoreJoueur1, nbTour, btnActualiser);
 
       statutJeu.setStyle("-fx-background-color: #9E9E9E");
       statutJeu.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
 
       scoreJoueuer2.setStyle("-fx-background-color: #9E9E9E");
       scoreJoueuer2.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
+      scoreJoueuer2.setText("joueur 1 : "+nom1.getText());
+      scoreJoueur1.setText("joueur 2 : "+nom2.getText());
 
       scoreJoueur1.setStyle("-fx-background-color: #9E9E9E");
       scoreJoueur1.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
@@ -174,7 +193,6 @@ public class HelloWorldApplication extends Application {
             grilleJeu.add(grille[i][j], j, i);
          }
       }
-
       stagePrincipale.setScene(scene2);
    }
    public static boolean diag1(char joueur, int n, Cell[][] grille){
@@ -226,19 +244,23 @@ public class HelloWorldApplication extends Application {
    }
    public boolean casesPleines(int n, Cell[][] grille){
       /*verifier si toutes les cellules ont ete jouées */
+      int tmp = 0;
       for(int i = 0 ; i < n ; i++){
          for (int j = 0 ; j < n ; j++){
-            if (grille[i][j].getSymbole() == ' ' ){
-               return false;
+            if (grille[i][j].getSymbole() != ' ' ){
+               tmp += 1;
             }
          }
-         return true ;
       }
-      return false ;
+      if (tmp == n*n){
+         return true;
+      }
+      return false;
    }
 
    public class Cell extends Pane {
       private char symbole = ' ';
+
 
       public Cell(int n, Cell[][] grille){
          setStyle("-fx-border-color: black");
@@ -276,14 +298,28 @@ public class HelloWorldApplication extends Application {
             setSymbole(joueurActuel);
             if (gagnant(joueurActuel, n, grille)){
                statutJeu.setText(joueurActuel + " vient de gagner le tour ! BRAVO");
-               scoreJoueur1.setText("score joueur "+joueurActuel +" est a 1");
-               char autreJoueur = (joueurActuel == 'X') ? 'O' : 'X';
-               scoreJoueuer2.setText("score joueur "+autreJoueur+" est  a 0");
+               if (joueurActuel == 'O') {
+                  scoreJO += 1 ;
+                  scoreJoueuer2.setText("score joueur "+ nom1.getText()+" est a "+scoreJO);
+                  scoreJoueur1.setText("score joueur "+ nom2.getText()+" est a "+scoreJX);
+               }
+               else{
+                  scoreJX += 1 ;
+                  scoreJoueur1.setText("score joueur "+ nom2.getText()+" est a "+scoreJX);
+                  scoreJoueuer2.setText("score joueur "+ nom1.getText()+" est a "+scoreJO);
+               }
+               nombreP += 1 ;
+               nbTour.setText("nombre de parties jouées = "+nombreP);
                joueurActuel= ' ';
             }
             else{
                joueurActuel = (joueurActuel == 'X') ? 'O' : 'X';
             }
+         }
+         if(casesPleines(n, grille)){
+            nombreP += 1 ;
+            nbTour.setText("nombre de parties jouées = "+nombreP);
+            joueurActuel= ' ';
          }
       }
    }
