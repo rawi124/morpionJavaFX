@@ -8,6 +8,9 @@ un simple projet ecrit en java qui permet de jouer au morpion, en utilisant java
 `mvn compile`
 
 `mvn package`
+## Exemple
+![authentification](1.png)
+![partie](2.png)
 
 
 
