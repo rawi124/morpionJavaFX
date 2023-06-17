@@ -1,8 +1,7 @@
 # JavaFX Sample Maven Project
-a simple sample of the use of JavaFX with Maven
+un simple projet ecrit en java qui permet de jouer au morpion, en utilisant javaFX
 
 ## Build
-Enter the following commands:
 
 `mvn clean`
 
@@ -11,8 +10,4 @@ Enter the following commands:
 `mvn package`
 
 
-## Run
-Enter the following command from the root directory:
-
-`java -cp target/javafx-1.0.0-SNAPSHOT-dist/* fr.utln.javafx.sample.hello.HelloWorldMain`
 
