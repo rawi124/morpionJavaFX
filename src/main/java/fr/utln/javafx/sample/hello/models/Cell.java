@@ -5,7 +5,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 
-
 public class Cell extends Pane {
     private char symbole = ' ';
     public Cell(int n, Cell[][] grille){
@@ -19,8 +18,6 @@ public class Cell extends Pane {
 
     public void setSymbole(char symbole) {
         this.symbole = symbole;
-        //un joueur est defini par son symbole
-
         if(symbole == 'X'){
             Line diag1 = new Line(10,10,this.getWidth(),  this.getHeight());
             diag1.setStrokeWidth(10);
@@ -35,14 +32,12 @@ public class Cell extends Pane {
             diag2.setStroke(Controller.selectionneurCouleur1.getValue());
             getChildren().addAll(diag1, diag2);
         }
-        else{//pour apres traiter cas des X et O
+        else{
             Ellipse clip = new Ellipse(this.getWidth()/2, this.getHeight()/2, this.getWidth()/2 - 10, this.getHeight()/2-10);
             clip.setFill(Controller.selectionneurCouleur2.getValue());
             getChildren().addAll(clip);
         }
-
     }
-
     public  boolean diag1(char joueur, int n, Cell[][] grille){
         for (int i = 0 ; i  < n ; i++){
             if(grille[i][i].getSymbole() != joueur ){
@@ -62,7 +57,6 @@ public class Cell extends Pane {
         return true ;
     }
     public  boolean lignes(char joueur, int n, Cell[][] grille){
-
         for (int i = 0 ; i  < n ; i++){
             int tmp = 0;
             for(int j = 0; j < n ; j++){
@@ -73,7 +67,6 @@ public class Cell extends Pane {
         }
         return false ;
     }
-
     public boolean colonnes(char joueur, int n, Cell[][] grille){
         for(int i = 0; i < n; i++) {
             int tmp = 0 ;

@@ -55,71 +55,51 @@ public class Controller  {
         Color couleurJoueur2 = selectionneurCouleur2.getValue();
         Color couleurJoueur1 = selectionneurCouleur1.getValue();
 
-        //ajoute les composantes graphiques a la borderPane
         disposition.setPadding(new Insets(100, 100, 100, 100));
         disposition.setVgap(5);
         disposition.setHgap(5);
         disposition.getChildren().addAll( morpion, nom1, nom2, btnDebut, tailleGrille, selectionneurCouleur1, selectionneurCouleur2);
-
         GridPane.setConstraints(morpion, 0, 1);
-        //GridPane.setConstraints(image, 0, 0);
-        morpion.setFont(Font.font( 50));//pour la taille des caracteres
+        morpion.setFont(Font.font( 50));
         morpion.setTextFill(Color.web("#6A8A82"));//la couleur du texte
         GridPane.setHalignment(morpion, javafx.geometry.HPos.CENTER);
-
-
-
-        //espace de declaration du TextField pour le joueur 1
         nom1.setPromptText("Joueur 1");
         nom1.setPrefColumnCount(5);
         nom1.setStyle("    -fx-min-width: 20; -fx-min-height: 40;");
-        nom1.setFont(Font.font( 20));//pour la taille des caracteres
+        nom1.setFont(Font.font( 20));
         GridPane.setConstraints(nom1, 0, 5);
-
-        //espace de declaration du TextField pour le joueur 2
         nom2.setPrefColumnCount(15);
         nom2.setPromptText("Joueuer 2");
         GridPane.setConstraints(nom2, 0, 6);
         nom2.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
-        nom2.setFont(Font.font( 20));//pour la taille des caracteres
-
-        //espace de declaration du TextField pour la taille de la grille
+        nom2.setFont(Font.font( 20));
         tailleGrille.setPrefColumnCount(20);
         tailleGrille.setPromptText("taille de la grille");
         GridPane.setConstraints(tailleGrille, 0, 7);
-
         GridPane.setConstraints(selectionneurCouleur1, 0, 8);
         GridPane.setConstraints(selectionneurCouleur2, 0, 9);
         GridPane.setHalignment(selectionneurCouleur1, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(selectionneurCouleur2, javafx.geometry.HPos.CENTER);
-
         GridPane.setConstraints(bienvenue, 0, 10);
         GridPane.setColumnSpan(bienvenue, 2);
         disposition.getChildren().add(bienvenue);
-
         tailleGrille.setStyle("    -fx-min-width: 40; -fx-min-height: 40;");
         tailleGrille.setFont(Font.font( 20));//pour la taille des caracteres
-
         btnDebut.setStyle("-fx-min-width:200; -fx-max-height: 200;");
         GridPane.setConstraints(btnDebut, 0, 11);
         GridPane.setHalignment(btnDebut, javafx.geometry.HPos.CENTER);
-        //GridPane.setHalignment(image, javafx.geometry.HPos.CENTER);
-
         btnActualiser.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
         btnAcceuil.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
-
         btnActualiser.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent actionEvent) {
                 Random random = new Random();
-                int nb = random.nextInt(2);//generer un entier aleatoire 0 ou 1 0 donnera X et 1 donnera 0
+                int nb = random.nextInt(2);
                 joueurActuel = joueurs.charAt(nb);
                 nouvellePartie(stagePrincipale);
 
             }
         });
-
-
 
         btnDebut.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -151,25 +131,19 @@ public class Controller  {
         stagePrincipale.show();
     }
     public static void nouvellePartie(Stage stagePrincipale){
-
         GridPane grilleJeu = new GridPane();
         BorderPane borderPane = new BorderPane();
         FlowPane composants = new FlowPane(10, 10 ,statutJeu, scoreJoueuer2, scoreJoueur1, nbTour, btnActualiser);
-
         statutJeu.setStyle("-fx-background-color: #9E9E9E");
         statutJeu.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
-
         scoreJoueuer2.setStyle("-fx-background-color: #9E9E9E");
         scoreJoueuer2.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
         scoreJoueuer2.setText("joueur 1 : "+nom1.getText());
         scoreJoueur1.setText("joueur 2 : "+nom2.getText());
-
         scoreJoueur1.setStyle("-fx-background-color: #9E9E9E");
         scoreJoueur1.setStyle("-fx-min-width: 100; -fx-max-height: 100;");
-
         borderPane.setCenter(grilleJeu);
         borderPane.setBottom(composants);
-
         Scene scene2 = new Scene(borderPane, 1000, 1000);
         int n = Integer.parseInt(tailleGrille.getText());
         Cell[][] grille = new Cell[n][n];
@@ -187,99 +161,72 @@ public class Controller  {
     public static String getJoueurs() {
         return joueurs;
     }
-
     public Random getRandom() {
         return random;
     }
-
-
     public char getJoueurActuel() {
         return joueurActuel;
     }
-
     public Button getBtnDebut() {
         return btnDebut;
     }
-
     public Button getBtnQuitter() {
         return btnQuitter;
     }
-
     public Label getMorpion() {
         return morpion;
     }
-
     public Label getBienvenue() {
         return bienvenue;
     }
-
     public Label getStatutJeu() {
         return statutJeu;
     }
-
     public Label getScoreJoueur1() {
         return scoreJoueur1;
     }
-
     public Label getScoreJoueuer2() {
         return scoreJoueuer2;
     }
-
-
-
     public Label getNbTour() {
         return nbTour;
     }
-
     public GridPane getDisposition() {
         return disposition;
     }
-
     public Scene getScene() {
         return scene;
     }
-
     public TextField getNom1() {
         return nom1;
     }
-
     public TextField getNom2() {
         return nom2;
     }
-
     public TextField getTailleGrille() {
         return tailleGrille;
     }
-
     public ColorPicker getSelectionneurCouleur1() {
         return selectionneurCouleur1;
     }
-
     public ColorPicker getSelectionneurCouleur2() {
         return selectionneurCouleur2;
     }
-
     public Button getBtnAcceuil() {
         return btnAcceuil;
     }
-
     public Button getBtnActualiser() {
         return btnActualiser;
     }
-
-
     public int getScoreJX() {
         return scoreJX;
     }
-
     public int getScoreJO() {
         return scoreJO;
     }
-
     public int getNombreP() {
         return nombreP;
     }
-
     public Popup getPopup() {
         return popup;
     }
